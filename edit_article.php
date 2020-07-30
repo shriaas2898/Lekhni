@@ -13,7 +13,7 @@ if(!isset($_SESSION["user_id"])){
     $body = $_POST["art_body"];
     $id = (int) $_SESSION["user_id"];
     if($stmnt->execute()){
-        echo "<script type='text/javascript'>alert('Changes have been saved!');
+        echo "<script type='text/javascript'>alert('Article Added!');
         window.location.href='index.php';</script>";
       }
       else{
@@ -45,7 +45,7 @@ if(!isset($_SESSION["user_id"])){
     $stmnt->bind_param("i",$id);
     $id = (int) $art_id;
     if($stmnt->execute()){
-        echo "<script type='text/javascript'>alert('succsessful deleted!');
+        echo "<script type='text/javascript'>alert('succsessfully deleted!');
         window.location.href='index.php';</script>";
       }
       else{
@@ -66,9 +66,7 @@ try{
   $heading = "New Article";
   //If the article exists
   if(isset($_GET["ida"])){
-
-
-  $art_id =   $_GET["ida"];
+  $art_id = $_GET["ida"];
   $result = $conn->query("SELECT title, body,name,uid FROM articles a,user u WHERE id = $art_id AND auth_id = uid LIMIT 1");
   if($result){
       $row = $result->fetch_assoc();
@@ -97,7 +95,7 @@ try{
       <a href="index.php" class="logo"> <img src="files/logo.png" alt="Lekhni" height="150"> </a>
       <div class="header-right">
         <a  href="index.php">Home</a>
-        <a class="active" href="user.php">My Profile</a> <!--ToDo-->
+        <?php echo "<a clas='active' href='author.php?idu=".$_SESSION["user_id"]."'>My Articles</a>"; ?>
         <a href="logout.php">Sign Out</a>
 
       </div>
@@ -113,30 +111,42 @@ try{
     <input type="text" placeholder="Enter Title" name="art_title" required value='<?php echo "$title"; ?>'>
 
     <textarea  name="art_body" form="edit_article_form" rows="50" cols="150" required> <?php echo "$body"; ?> </textarea>
-
+    <input type="hidden" value=" <?php echo "$art_id" ; ?>" name="art_id">
     <div class="clearfix">
-      <button type="button" class="cancelbtn" name="del">Delete</button>
+      <button type="submit" class="cancelbtn" name="del">Delete</button>
       <button type="submit" class="signupbtn" name="submit">Save</button>
     </div>
   </div>
   </form>
   </body>
   <?php
-if(isset($_GET["ida"])){
-  if(isset($_POST["submit"])){
-      update_article($conn,$art_id);
+
+if(isset($_POST["submit"])){
+ if(isset($_POST["art_id"])){
+      var_dump($_GET);
+      update_article($conn,$_GET["ida"]);
     }
-  if(isset($_POST["del"])){
+    else{
+    add_article($conn,$art_id);
+    }
+}
+
+if(isset($_POST["del"])){
+  if(isset($_POST["art_id"])){
+    var_dump($_GET);
     delete_article($conn,$art_id);
+      }
+  else{
+    echo "<script type='text/javascript'>alert('Changes discarded.');
+    window.location.href='index.php';</script>";
   }
-  }
+}*/
 
   $conn->close();
 }//End of try block
     catch(Exception $e) {
       //Display message on unsuccsessful registration
       echo "Error: " . $e->getMessage();
-      //echo "<script type='text/javascript'>alert('We are not able to complete your registration, please try again later.');</script>";
     }
 
    ?>

@@ -1,14 +1,22 @@
 
 <?php
 session_start();
-try{      //Create connection
+if(!(isset($_SESSION["user_id"]) && ($_SESSION["user_id"] == $_GET["idu"]))){
+  header("Location: not_allowed.html");
+  die();
+}
+try{   //Create connection
       $conn = new mysqli("localhost","pma","pass","lekhni_db");
       //Check connection
       if($conn->connect_error){
         die("Connection failed: " . $conn->connect_error);
       }
-      $result = $conn->query("SELECT title, modified,body,name,id FROM articles a,user u WHERE auth_id = uid ORDER BY modified DESC");
+      $auth_id = $_GET["idu"];
+      $result = $conn->query("SELECT title, modified,body,name,id FROM articles a,user u WHERE auth_id = uid AND uid = $auth_id ORDER BY modified DESC");
       $rows = $result->fetch_all(MYSQLI_ASSOC);
+
+      //Since Author is common for all the articles.
+      $name = $rows[0]["name"];
  ?>
 <!DOCTYPE html>
 <html>
@@ -22,23 +30,15 @@ try{      //Create connection
     <div class="header">
       <a href="index.php" class="logo"> <img src="files/logo.png" alt="Lekhni" height="150"> </a>
       <div class="header-right">
-        <a class="active" href="index.php">Home</a>
-        <?php
-          if(isset($_SESSION["user_id"])){
-            echo "<a  href='author.php?idu=".$_SESSION["user_id"]."'>My Articles</a>";
-            echo "<a href='logout.php'>Sign Out</a>";
-          }
-          else{
-            echo '<a  href="register.php">Sign Up</a>';
-            echo '<a href="login.php">Sign In</a>';
-          }
-         ?>
-
+          <a  href="index.php">Home</a>
+          <a  href="edit_article.php">Add Article</a>
+            <a  class='active' href='author.php/idu=".$_SESSION["user_id"]."'>My Articles</a>
+            <a href='logout.php'>Sign Out</a>
       </div>
     </div>
 
 
-    <h1>Main Page content</h1>
+    <h1><u> <?php echo "$name"; ?> </u></h1>
 
     <div class="container">
       <?php foreach($rows as $row) {
