@@ -1,4 +1,5 @@
 # Lekhni
+<img src="files/logo.png" height="150px"> 
 **Lekhni** which translates to “stylus” , an object for writing, is a space to express yourself by writing blogs and reading others.
 
 Here are few snapshots of the page:
