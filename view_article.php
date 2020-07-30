@@ -25,7 +25,7 @@ try{
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="css/style.css">
-    <title></title>
+    <title> <?php echo "$title"; ?> </title>
   </head>
   <body>
     <div class="header">

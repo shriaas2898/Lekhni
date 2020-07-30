@@ -23,7 +23,7 @@ try{   //Create connection
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="css/style.css">
-    <title>Lekhni SignUp</title>
+    <title>User Profile</title>
   </head>
   <body>
 
