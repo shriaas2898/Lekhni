@@ -48,14 +48,14 @@ try{
 
       </div>
     </div>
-    <div class="container">
+    <div class="article_block">
 
        <?php
        echo "<h1 class='art_title'>$title</h1>";
-        echo "Last Modified: $time";
+        echo "<span>Last Modified: $time</span>";
         ?>
         <p class="art_body"> <?php echo "$body"; ?> </p>
-        <?php echo "By: $author"; ?>
+        <span ><?php echo "Written By: $author"; ?></span>
     </div>
 
   </body>

@@ -38,8 +38,7 @@ try{   //Create connection
     </div>
 
 
-    <h1><u> <?php echo "$name"; ?> </u></h1>
-
+    <h1 class="heading"><u> <?php echo "$name"; ?> </u></h1>
     <div class="container">
       <?php foreach($rows as $row) {
         $id = $row["id"];
@@ -47,7 +46,7 @@ try{   //Create connection
       <div class="article_block">
         <h2><?php echo "<a href='view_article.php?ida=$id'>".$row['title']."</a>";  ?></h2>
         <?php echo "Written By:".$row['name']." On: ".$row['modified'].""; ?>
-        <p> <?php echo substr($row['body'],0,80)."..."; ?> </p>
+        <p> <?php echo substr($row['body'],0,250)."...<a href='view_article.php?ida=$id'>(Read More)</a>"; ?> </p>
         <hr>
       </div>
       <?php

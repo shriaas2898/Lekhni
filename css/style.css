@@ -56,6 +56,7 @@ body {
   }
 }
 
+
 /* Full-width input fields */
 input[type=email], input[type=text], input[type=password], textarea {
   width: 100%;
@@ -78,7 +79,7 @@ hr {
 
 /* Set a style for all buttons */
 button {
-  background-color: #4CAF50;
+  background-color: #38b6ff;
   color: white;
   padding: 14px 20px;
   margin: 8px 0;
@@ -95,7 +96,7 @@ button:hover {
 /* Extra styles for the cancel button */
 .cancelbtn {
   padding: 14px 20px;
-  background-color: #f44336;
+  background-color: #737373;
 }
 
 /* Float cancel and signup buttons and add an equal width */
@@ -104,16 +105,52 @@ button:hover {
   width: 50%;
 }
 
+
 /* Add padding to container elements */
 .container {
+
   padding: 16px;
 }
 
+.article_block{
+  padding: 20px;
+  background-color: #f1eded;
+  width: 90%;
+  margin: 10px 50px 10px 50px;
+  box-shadow: 5px 5px #5cc0fa;
+  border-radius: 25px;
+}
+.heading{
+  color: #5cc0fa;
+  text-decoration: underline;
+  text-align: center;
+}
+.article_block a{
+  text-decoration: none;
+  color: black;
+}
+
+.article_block a:hover{
+  color: #5cc0fa;
+  text-decoration: underline;
+}
+.article_block a::after{
+  color: #bbb;
+}
 /* Clear floats */
 .clearfix::after {
   content: "";
   clear: both;
   display: table;
+}
+.article_block span{
+  color: #30769f;
+  font-size: 20px;
+}
+.article_block p{
+  padding: 10px 50px 10px 50px;
+  text-align: left;
+  font-size: 20px;
 }
 
 /* Change styles for cancel button and signup button on extra small screens */

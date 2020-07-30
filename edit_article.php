@@ -123,7 +123,9 @@ try{
 
 if(isset($_POST["submit"])){
   var_dump($_POST);
- if(isset($_POST["art_id"])){
+
+ if($_POST["art_id"] != " "){
+    var_dump($_POST["art_id"]);
     update_article($conn,$_POST["art_id"]);
     }
     else{
@@ -132,7 +134,7 @@ if(isset($_POST["submit"])){
 }
 
 if(isset($_POST["del"])){
-  if(isset($_POST["art_id"])){
+  if($_POST["art_id"] != " "){
     delete_article($conn,$_POST["art_id"]);
       }
   else{
