@@ -7,7 +7,7 @@ $_SESSION[user_id] = -1;
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="css/style.css">
-    <title>Lekhni SignUp</title>
+    <title>Lekhni Sign In</title>
   </head>
   <body>
 
@@ -28,7 +28,7 @@ $_SESSION[user_id] = -1;
     <hr>
 
     <label for="email"><b>Email</b></label>
-    <input type="text" placeholder="Enter Email" name="email" required>
+    <input type="email" placeholder="Enter Email" name="email" required>
 
     <label for="pass"><b>Password</b></label>
     <input type="password" placeholder="Enter Password" name="pass" required>
