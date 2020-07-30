@@ -111,7 +111,7 @@ try{
     <input type="text" placeholder="Enter Title" name="art_title" required value='<?php echo "$title"; ?>'>
 
     <textarea  name="art_body" form="edit_article_form" rows="50" cols="150" required> <?php echo "$body"; ?> </textarea>
-    <input type="hidden" value=" <?php echo "$art_id" ; ?>" name="art_id">
+    <input type="hidden" value=" <?php echo "$art_id"; ?>" name="art_id">
     <div class="clearfix">
       <button type="submit" class="cancelbtn" name="del">Delete</button>
       <button type="submit" class="signupbtn" name="submit">Save</button>
@@ -122,25 +122,24 @@ try{
   <?php
 
 if(isset($_POST["submit"])){
+  var_dump($_POST);
  if(isset($_POST["art_id"])){
-      var_dump($_GET);
-      update_article($conn,$_GET["ida"]);
+    update_article($conn,$_POST["art_id"]);
     }
     else{
-    add_article($conn,$art_id);
+    add_article($conn);
     }
 }
 
 if(isset($_POST["del"])){
   if(isset($_POST["art_id"])){
-    var_dump($_GET);
-    delete_article($conn,$art_id);
+    delete_article($conn,$_POST["art_id"]);
       }
   else{
     echo "<script type='text/javascript'>alert('Changes discarded.');
     window.location.href='index.php';</script>";
   }
-}*/
+}
 
   $conn->close();
 }//End of try block
