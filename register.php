@@ -33,10 +33,6 @@
     <label for="pass"><b>Password</b></label>
     <input type="password" placeholder="Enter Password" name="pass" required>
 
-    <!--<label for="pass-repeat"><b>Repeat Password</b></label>
-    <input type="password" placeholder="Repeat Password" name="psw-repeat" required>-->
-
-
     <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
 
     <div class="clearfix">
@@ -49,15 +45,9 @@
   <?php
     if(isset($_POST["submit"])){
       print_r($_POST);
-    //If passwords are not matching
-    /*if($_POST["pass"] != $_POST["pass-repeat"]){
-      die("Passwords do not match")
-    }*/
     try{
           //Create connection
           $conn = new mysqli("localhost","pma","pass","lekhni_db");
-          // set the PDO error mode to exception
-          //$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
           //Check connection
           if($conn->connect_error){
             die("Connection failed: " . $conn->connect_error);
@@ -77,8 +67,7 @@
 
   } catch(Exception $e) {
     //Display message on unsuccsessful registration
-    echo "Error: " . $e->getMessage();
-    //echo "<script type='text/javascript'>alert('We are not able to complete your registration, please try again later.');</script>";
+    echo "<script type='text/javascript'>alert('We are not able to complete your registration, please try again later.');</script>";
   }
 }
    ?>
