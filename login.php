@@ -41,11 +41,6 @@ $_SESSION[user_id] = -1;
   </body>
   <?php
     if(isset($_POST["submit"])){
-      print_r($_POST);
-    //If passwords are not matching
-    /*if($_POST["pass"] != $_POST["pass-repeat"]){
-      die("Passwords do not match")
-    }*/
     try{
           //Create connection
           $conn = new mysqli("localhost","pma","pass","lekhni_db");
@@ -62,12 +57,20 @@ $_SESSION[user_id] = -1;
           $row = $result->fetch_assoc();
           $stored_pass =$row["pass"];
           $id = $row["uid"];
+          $conn->close();
+          $result->close();
           if (password_verify($user_pass,$stored_pass)){
 
             $_SESSION["user_id"] = $id;
-            header("Location: index.php");
-            echo "<script type='text/javascript'>alert('You have succsessfully registered!');</script>";
+            echo "<script type='text/javascript'>alert('You have succsessfully logged-in!');
+            window.location.href='index.php';
+            </script>";
             die("Login succsessful");
+          }
+          else{
+            echo "<script type='text/javascript'>alert('The email or password you have entered does not match our records.
+             \n Please try again.');
+             </script>";
           }
 
 

@@ -62,9 +62,10 @@
 
           $stmnt->execute();
           //Display message on succsessful registration
-          echo "<script type='text/javascript'>alert('You have succsessfully registered!');</script>";
-          header("Location: login.php");
-
+          echo "<script type='text/javascript'>alert('You have succsessfully registered!');
+          window.location.href='login.php';</script>";
+          $conn->close();
+          die();
   } catch(Exception $e) {
     //Display message on unsuccsessful registration
     echo "<script type='text/javascript'>alert('We are not able to complete your registration, please try again later.');</script>";
