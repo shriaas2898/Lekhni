@@ -1,3 +1,10 @@
+<?php
+session_start();
+// If user is already loggedin
+if(isset($_SESSION["user_id"])){
+header("Location: logout.php");
+}
+?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -52,7 +59,13 @@
           if($conn->connect_error){
             die("Connection failed: " . $conn->connect_error);
           }
-
+          //Checking existing email id
+          $result = $conn->query("SELECT uid, pass FROM user WHERE email = '$email' LIMIT 1");
+          if($result){
+          echo "<script type='text/javascript'>alert('This account already exists');  window.location.href='register.php';</script>";
+            
+        }
+        else{
           $stmnt = $conn->prepare("INSERT INTO user (email,name,pass) values (?, ?, ?)");
           $stmnt->bind_param("sss", $email, $name ,$hashed_pass);
 
@@ -63,7 +76,7 @@
           $stmnt->execute();
           //Display message on succsessful registration
           echo "<script type='text/javascript'>alert('You have succsessfully registered!');
-          window.location.href='login.php';</script>";
+          window.location.href='login.php';</script>";}
           $conn->close();
           die();
   } catch(Exception $e) {

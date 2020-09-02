@@ -45,9 +45,9 @@ try{      //Create connection
         $id = $row["id"];
         ?>
       <div class="article_block">
-        <h2><?php echo "<a href='view_article.php?ida=$id'>".$row['title']."</a>";  ?></h2>
+        <h2><?php echo "<a href='view_article.php?ida=$id'>".htmlentities($row['title'])."</a>";  ?></h2>
         <?php echo "Written By:".$row['name']." On: ".$row['modified'].""; ?>
-        <p> <?php echo substr($row['body'],0,250)."...<a href='view_article.php?ida=$id'>(Read More)</a>"; ?> </p>
+        <p> <?php echo htmlentities(substr($row['body'],0,250))."...<a href='view_article.php?ida=$id'>(Read More)</a>"; ?> </p>
         <hr>
       </div>
       <?php

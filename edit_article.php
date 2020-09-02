@@ -1,9 +1,9 @@
 <?php
 session_start();
 if(!isset($_SESSION["user_id"])){
-  header("Location: not_allowed.html");
-
+ header("Location: not_allowed.html");
 }
+
 // Function to add new article
   function add_article($conn){
     $stmnt = $conn->prepare("INSERT INTO articles (title,body,auth_id) values (?, ?, ?)");
@@ -61,12 +61,14 @@ try{
   if($conn->connect_error){
     die("Connection failed: " . $conn->connect_error);
   }
+  
   $title ="";
   $body = "Your text here";
   $heading = "New Article";
   //If the article exists
   if(isset($_GET["ida"])){
   $art_id = $_GET["ida"];
+  
   $result = $conn->query("SELECT title, body,name,uid FROM articles a,user u WHERE id = $art_id AND auth_id = uid LIMIT 1");
   if($result){
       $row = $result->fetch_assoc();
@@ -77,6 +79,11 @@ try{
       $uid = $row["uid"];
       //Changing the heading of page
       $heading = "Editing: $title";
+
+    if($_SESSION["user_id"] != $uid){
+    header("Location: not_allowed.html");
+    die();
+    }
       $result->close();
   }
 }
@@ -122,16 +129,17 @@ try{
   <?php
 
 if(isset($_POST["submit"])){
-  var_dump($_POST);
+
 
  if($_POST["art_id"] != " "){
-    var_dump($_POST["art_id"]);
+  
     update_article($conn,$_POST["art_id"]);
     }
     else{
     add_article($conn);
     }
 }
+
 
 if(isset($_POST["del"])){
   if($_POST["art_id"] != " "){

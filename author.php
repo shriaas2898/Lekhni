@@ -1,17 +1,22 @@
 
 <?php
 session_start();
-if(!(isset($_SESSION["user_id"]) && ($_SESSION["user_id"] == $_GET["idu"]))){
+if(!(isset($_SESSION["user_id"]))){
   header("Location: not_allowed.html");
   die();
 }
+error_reporting(E_ALL);
+/*if(!(isset($_SESSION["user_id"]) && ($_SESSION["user_id"] == $_GET["idu"]))){
+  header("Location: not_allowed.html");
+  die();
+}*/
 try{   //Create connection
       $conn = new mysqli("localhost","pma","pass","lekhni_db");
       //Check connection
       if($conn->connect_error){
         die("Connection failed: " . $conn->connect_error);
       }
-      $auth_id = $_GET["idu"];
+      $auth_id = $_SESSION["user_id"];
       $result = $conn->query("SELECT title, modified,body,name,id FROM articles a,user u WHERE auth_id = uid AND uid = $auth_id ORDER BY modified DESC");
       $rows = $result->fetch_all(MYSQLI_ASSOC);
 
@@ -46,7 +51,7 @@ try{   //Create connection
       <div class="article_block">
         <h2><?php echo "<a href='view_article.php?ida=$id'>".$row['title']."</a>";  ?></h2>
         <?php echo "Written By:".$row['name']." On: ".$row['modified'].""; ?>
-        <p> <?php echo substr($row['body'],0,250)."...<a href='view_article.php?ida=$id'>(Read More)</a>"; ?> </p>
+        <p> <?php echo htmlentities(substr($row['body'],0,250))."...<a href='view_article.php?ida=$id'>(Read More)</a>"; ?> </p>
         <hr>
       </div>
       <?php

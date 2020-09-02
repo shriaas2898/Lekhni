@@ -1,6 +1,9 @@
 <?php
+// If user is already loggedin 
 session_start();
-$_SESSION[user_id] = -1;
+if(isset($_SESSION["user_id"])){
+header("Location: logout.php");
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -63,7 +66,7 @@ $_SESSION[user_id] = -1;
 
             $_SESSION["user_id"] = $id;
             echo "<script type='text/javascript'>alert('You have succsessfully logged-in!');
-            window.location.href='index.php';
+            window.location.href='author.php';
             </script>";
             die("Login succsessful");
           }
