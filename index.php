@@ -1,14 +1,17 @@
 
 <?php
 session_start();
-try{      //Create connection
-      $conn = new mysqli("localhost","pma","pass","lekhni_db");
-      //Check connection
-      if($conn->connect_error){
-        die("Connection failed: " . $conn->connect_error);
+require "database/db_operations.php";
+try{      
+      //Create Database Object
+      $dbo = new DBOperation();
+      $result = $dbo->execute_query("SELECT title, modified,body,name,id FROM articles a,user u WHERE auth_id = uid ORDER BY modified DESC");
+      if($result[0]==-1){
+        die("Internal Error occured");
       }
-      $result = $conn->query("SELECT title, modified,body,name,id FROM articles a,user u WHERE auth_id = uid ORDER BY modified DESC");
-      $rows = $result->fetch_all(MYSQLI_ASSOC);
+      if ($result[0]==1){
+        $rows = $result[1];
+      }
  ?>
 <!DOCTYPE html>
 <html>
@@ -41,7 +44,10 @@ try{      //Create connection
     <h1 class="heading">Welcome! What will you read today...?</h1>
 
     <div class="container">
-      <?php foreach($rows as $row) {
+      <?php 
+      // If website has some content
+      if(isset($rows)){
+        foreach($rows as $row) {
         $id = $row["id"];
         ?>
       <div class="article_block">
@@ -52,14 +58,21 @@ try{      //Create connection
       </div>
       <?php
     }
-    $conn->close();
-    $result->close();
+  } 
+  else{
+    ?>
+    <h2>No articles yet!</h2>
+    <?php
+    $dbo->destroy_conn();
+  }
+
 
     } catch(Exception $e) {
     //Display message on unsuccsessful retrival
     //echo "Error: " . $e->getMessage();
     echo "<script type='text/javascript'>alert('We are not able to complete your registration, please try again later.');</script>";
     }
+    
     ?>
   </div>
 

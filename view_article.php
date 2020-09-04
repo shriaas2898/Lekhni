@@ -2,17 +2,14 @@
 session_start();
 
 //Retriving article based on query parameter.
-
 try{
-      //Create connection
-      $conn = new mysqli("localhost","pma","pass","lekhni_db");
-      //Check connection
-      if($conn->connect_error){
-        die("Connection failed: " . $conn->connect_error);
-      }
-      $art_id =   $_GET["ida"];
-      $result = $conn->query("SELECT title, modified,body,name,uid FROM articles a,user u WHERE id = $art_id AND auth_id = uid LIMIT 1");
-      $row = $result->fetch_assoc();
+      //Create Database Object
+      echo "Getting object";
+        $dbo = new DBOperation();
+      echo "Got object";
+      $art_id =   int($_GET["ida"]);
+      $row = $dbo->execute_query("SELECT title, modified,body,name,uid FROM articles a,user u WHERE id = ? AND auth_id = uid LIMIT 1","i",$art_id);
+      var_dump($row);
       $title = $row['title'];
       $body = $row['body'];
       $time = $row['modified'];
@@ -34,7 +31,7 @@ try{
         <a class="active" href="index.php">Home</a>
         <?php
           if(isset($_SESSION["user_id"])){
-            echo "<a  href='user.php/id'>My Profile</a>";//TODO
+            echo "<a  href='user.php/id'>My Profile</a>";
             echo "<a href='logout.php'>Sign Out</a>";
             if($_SESSION["user_id"] == $uid){
               echo "<a  href='edit_article.php?ida=$art_id'>Edit Article</a>";
@@ -60,8 +57,7 @@ try{
 
   </body>
   <?php
-          $conn->close();
-          $result->close();
+   $dbo->destroy_conn();
 
   } catch(Exception $e) {
     //Display message on unsuccsessful registration

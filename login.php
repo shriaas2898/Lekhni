@@ -66,7 +66,9 @@ header("Location: logout.php");
 
             $_SESSION["user_id"] = $id;
             echo "<script type='text/javascript'>alert('You have succsessfully logged-in!');
-            window.location.href='author.php';
+            window.location.href='authoSome modern browsers support the new Cache API. This API is designed for storing HTTP responses to specific requests, and is very useful for doing things like storing website assets offline so the site can subsequently be used without a network connection. Cache is usually used in combination with the Service Worker API, although it doesn't have to be.
+
+            Use of Cache and Service Workers is an advanced topic, andr.php';
             </script>";
             die("Login succsessful");
           }
