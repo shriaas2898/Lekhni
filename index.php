@@ -1,13 +1,14 @@
 
 <?php
 session_start();
+if(isset($_COOKIE['uid'])) $_SESSION['user_id'] = $_COOKIE['uid'];
 require "database/db_operations.php";
 try{      
       //Create Database Object
       $dbo = new DBOperation();
       $result = $dbo->execute_query("SELECT title, modified,body,name,id FROM articles a,user u WHERE auth_id = uid ORDER BY modified DESC");
       if($result[0]==-1){
-        die("Internal Error occured");
+        echo "<script type='text/javascript'>alert('We are not able to complete your registration, please try again later.');</script>";
       }
       if ($result[0]==1){
         $rows = $result[1];
@@ -63,7 +64,6 @@ try{
     ?>
     <h2>No articles yet!</h2>
     <?php
-    $dbo->destroy_conn();
   }
 
 

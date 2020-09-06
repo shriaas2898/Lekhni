@@ -1,27 +1,33 @@
 
 <?php
 session_start();
+error_reporting(E_ALL);
+if(isset($_COOKIE['uid'])) $_SESSION['user_id'] = $_COOKIE['uid'];
 if(!(isset($_SESSION["user_id"]))){
   header("Location: not_allowed.html");
   die();
 }
-error_reporting(E_ALL);
+
+
+require "database/db_operations.php";
+
 /*if(!(isset($_SESSION["user_id"]) && ($_SESSION["user_id"] == $_GET["idu"]))){
   header("Location: not_allowed.html");
   die();
 }*/
-try{   //Create connection
-      $conn = new mysqli("localhost","pma","pass","lekhni_db");
-      //Check connection
-      if($conn->connect_error){
-        die("Connection failed: " . $conn->connect_error);
-      }
+try{  
+      //Create Database Object
+      $dbo = new DBOperation();
       $auth_id = $_SESSION["user_id"];
-      $result = $conn->query("SELECT title, modified,body,name,id FROM articles a,user u WHERE auth_id = uid AND uid = $auth_id ORDER BY modified DESC");
-      $rows = $result->fetch_all(MYSQLI_ASSOC);
-
-      //Since Author is common for all the articles.
-      $name = $rows[0]["name"];
+      $result = $dbo->execute_query("SELECT name FROM user WHERE uid = ?","i",$auth_id);
+      $name = $result[1][0]["name"];
+      $result = $dbo->execute_query("SELECT title, modified,body,name,id FROM articles a,user u WHERE auth_id = uid AND uid = ? ORDER BY modified DESC","i",$auth_id);
+      if($result[0]==-1){
+        echo "<script type='text/javascript'>alert('We are not able to complete your registration, please try again later.');</script>";
+      }
+      if ($result[0]==1){
+        $rows = $result[1];
+      }
  ?>
 <!DOCTYPE html>
 <html>
@@ -45,21 +51,30 @@ try{   //Create connection
 
     <h1 class="heading"><u> <?php echo "$name"; ?> </u></h1>
     <div class="container">
-      <?php foreach($rows as $row) {
+      <?php 
+      if(isset($rows)){
+      foreach($rows as $row) {
         $id = $row["id"];
         ?>
       <div class="article_block">
         <h2><?php echo "<a href='view_article.php?ida=$id'>".$row['title']."</a>";  ?></h2>
         <?php echo "Written By:".$row['name']." On: ".$row['modified'].""; ?>
-        <p> <?php echo htmlentities(substr($row['body'],0,250))."...<a href='view_article.php?ida=$id'>(Read More)</a>"; ?> </p>
+        <p> <?php echo htmlentities(substr($row['body'],0,250))."...<a href='view_article.php?ida=$id'>(Read More)</a>";}
+        
+         ?> </p>
         <hr>
-      </div>
+<?php
+}// End of if
+   else{
+    ?>
+    <h2>No articles yet!</h2>
+
       <?php
     }
-    $conn->close();
-    $result->close();
+    }
 
-    } catch(Exception $e) {
+
+     catch(Exception $e) {
     //Display message on unsuccsessful retrival
     //echo "Error: " . $e->getMessage();
     echo "<script type='text/javascript'>alert('We are not able to complete your registration, please try again later.');</script>";

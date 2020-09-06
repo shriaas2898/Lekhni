@@ -1,5 +1,6 @@
 <?php
 session_start();
+if(isset($_COOKIE['uid'])) $_SESSION['user_id'] = $_COOKIE['uid'];
 require "database/db_operations.php";
 // If user is already loggedin
 if(isset($_SESSION["user_id"])){
@@ -55,7 +56,6 @@ header("Location: logout.php");
 
     //Create Database Object
       $dbo = new DBOperation();
-      //Check connection
       //Checking existing email id
       $email = $_POST["email"];
       $result = $dbo->execute_query("SELECT uid, pass FROM user WHERE email = ? LIMIT 1",'s',$email);
@@ -66,7 +66,7 @@ header("Location: logout.php");
     else{
       $name = $_POST["name"];
       $hashed_pass = password_hash($_POST['pass'], PASSWORD_BCRYPT);
-      $result = $dbo->execute_update("INSERT INTO user (email,name,pass) values (?, ?, ?)","sss", $email, $name ,$hashed_pass);
+      $result = $dbo->execute_update("INSERT INTO user ( email,name,pass) values (?, ?, ?)","sss", $email, $name ,$hashed_pass);
       var_dump($result);
       if($result){
       //Display message on succsessful registration

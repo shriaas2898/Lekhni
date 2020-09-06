@@ -1,5 +1,6 @@
 <?php
 session_start();
+if(isset($_COOKIE['uid'])) $_SESSION['user_id'] = $_COOKIE['uid'];
 require "database/db_operations.php";
 //Retriving article based on query parameter.
 try{
