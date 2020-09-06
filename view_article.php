@@ -1,15 +1,24 @@
 <?php
 session_start();
-
+require "database/db_operations.php";
 //Retriving article based on query parameter.
 try{
       //Create Database Object
-      echo "Getting object";
-        $dbo = new DBOperation();
-      echo "Got object";
-      $art_id =   int($_GET["ida"]);
-      $row = $dbo->execute_query("SELECT title, modified,body,name,uid FROM articles a,user u WHERE id = ? AND auth_id = uid LIMIT 1","i",$art_id);
-      var_dump($row);
+       $dbo = new DBOperation();
+      $art_id = (int)$_GET["ida"];
+      $result = $dbo->execute_query("SELECT title, modified,body,name,uid FROM articles a,user u WHERE id = ? AND auth_id = uid LIMIT 1","i",$art_id);
+      if($result[0]==-1){
+        die("Internal Error occured");
+      }
+      if ($result[0]==0){
+        header("Location: not_found.html");
+        die();
+      }
+      else{
+      if ($result[0]==1){
+        $row = $result[1][0];
+      }
+    }
       $title = $row['title'];
       $body = $row['body'];
       $time = $row['modified'];

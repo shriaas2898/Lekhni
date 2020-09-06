@@ -1,5 +1,6 @@
 <?php
 session_start();
+require "database/db_operations.php";
 // If user is already loggedin
 if(isset($_SESSION["user_id"])){
 header("Location: logout.php");
@@ -51,38 +52,34 @@ header("Location: logout.php");
   </body>
   <?php
     if(isset($_POST["submit"])){
-      print_r($_POST);
-    try{
-          //Create connection
-          $conn = new mysqli("localhost","pma","pass","lekhni_db");
-          //Check connection
-          if($conn->connect_error){
-            die("Connection failed: " . $conn->connect_error);
+
+    //Create Database Object
+      $dbo = new DBOperation();
+      //Check connection
+      //Checking existing email id
+      $email = $_POST["email"];
+      $result = $dbo->execute_query("SELECT uid, pass FROM user WHERE email = ? LIMIT 1",'s',$email);
+      if($result[0]==1){
+      echo "<script type='text/javascript'>alert('This account already exists');  window.location.href='register.php';</script>";
+        
+       }
+    else{
+      $name = $_POST["name"];
+      $hashed_pass = password_hash($_POST['pass'], PASSWORD_BCRYPT);
+      $result = $dbo->execute_update("INSERT INTO user (email,name,pass) values (?, ?, ?)","sss", $email, $name ,$hashed_pass);
+      var_dump($result);
+      if($result){
+      //Display message on succsessful registration
+      echo "<script type='text/javascript'>alert('You have succsessfully registered!');
+      window.location.href='login.php';</script>";
+    }
+    else{
+      //Display message on unsuccsessful registration
+      echo "<script type='text/javascript'>alert('We are not able to complete your registration, please try again later.');</script>";
+
+    }
           }
-          //Checking existing email id
-          $result = $conn->query("SELECT uid, pass FROM user WHERE email = '$email' LIMIT 1");
-          if($result){
-          echo "<script type='text/javascript'>alert('This account already exists');  window.location.href='register.php';</script>";
-            
-        }
-        else{
-          $stmnt = $conn->prepare("INSERT INTO user (email,name,pass) values (?, ?, ?)");
-          $stmnt->bind_param("sss", $email, $name ,$hashed_pass);
-
-          $email = $_POST["email"];
-          $name = $_POST["name"];
-          $hashed_pass = password_hash($_POST['pass'], PASSWORD_BCRYPT);
-
-          $stmnt->execute();
-          //Display message on succsessful registration
-          echo "<script type='text/javascript'>alert('You have succsessfully registered!');
-          window.location.href='login.php';</script>";}
-          $conn->close();
-          die();
-  } catch(Exception $e) {
-    //Display message on unsuccsessful registration
-    echo "<script type='text/javascript'>alert('We are not able to complete your registration, please try again later.');</script>";
-  }
+      die();
 }
    ?>
 </html>

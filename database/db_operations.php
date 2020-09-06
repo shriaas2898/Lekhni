@@ -52,10 +52,10 @@ function destroy_conn(){
        if($args) // If args are not empty
        { 
          $stmnt = $this->conn->prepare($query);
-         $stmt->bind_param($args);
-         var_dump($stmnt);
-         $result = $stmnt->execute();
-
+         $stmnt->bind_param(...$args);
+         $stmnt->execute();
+         $result = $stmnt->get_result();
+         //var_dump($result);
        }
        else{
         $result = $this->conn->query($query);
@@ -93,21 +93,19 @@ function destroy_conn(){
    $this->conn = $this->get_conn();
    $final_result = 0;
    try{
-       $stmnt = $this->conn->prepare($query);
-       if($args) // If args are not empty
-       {
-         $stmt->bind_param($args);
-       }
-       $result = $stmnt->execute();
-       if($result){
-         $final_result = 1;
+        $stmnt = $this->conn->prepare($query);
+        $stmnt->bind_param(...$args);
+        $result = $stmnt->execute();
+        if($result){
+          $final_result = 1;
        }
    }
    catch(Exception $e){
      $final_result= 0;
    }
    finally{
-    $this->destroy_conn(); 
+    $this->destroy_conn();
+    $stmnt->close(); 
     return $final_result;
      }
    }
