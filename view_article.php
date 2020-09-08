@@ -64,7 +64,10 @@ try{
         <p class="art_body"> <?php echo "$body"; ?> </p>
         <span ><?php echo "Written By: $author"; ?></span>
     </div>
-
+<!--Footer-->
+<footer >
+  <span class="dev-credits">Made with ❤ by Aastha Shrivastava</span>
+  </footer>
   </body>
   <?php
    $dbo->destroy_conn();

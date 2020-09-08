@@ -121,6 +121,11 @@ try{
     </div>
   </div>
   </form>
+
+<!--Footer-->
+<footer >
+  <span class="dev-credits">Made with ❤ by Aastha Shrivastava</span>
+  </footer>
   </body>
   <?php
 
