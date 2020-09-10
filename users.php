@@ -2,9 +2,15 @@
 <?php
 session_start();
 error_reporting(E_ALL);
-if(isset($_COOKIE['uid'])) $_SESSION['user_id'] = $_COOKIE['uid'];
+if(isset($_COOKIE['uid'])){
+     $_SESSION['user_id'] = $_COOKIE['uid'];
+     $_SESSION['role_id'] = $_COOKIE['rid'];
 
-
+    }
+     if(!(isset($_SESSION["user_id"]))){
+  header("Location: not_allowed.html");
+  die();
+}
 
 
 require "database/db_operations.php";
@@ -41,13 +47,13 @@ try{
       <div class="header-right">
           <a  href="index.php">Home</a>
           <div class="dropdown">
-             <a class='active dropbtn' href="#">My Profile</a>
+             <a  class='active dropbtn' href='edit_author.php/."'>My Profile</a>
              <div class="dropdown-content">  
                 <a  href="edit_article.php">Add Article</a>
-                <a href='edit_author.php'>Edit Profile</a>
+                <a href='author.php/idu=".$_SESSION["user_id"]."'>My Articles</a>
+                <a href='logout.php'>Sign Out</a>
               </div>    
           </div>
-          <a href='logout.php'>Sign Out</a>
       </div>
     </div>
 

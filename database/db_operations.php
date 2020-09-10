@@ -105,7 +105,6 @@ function destroy_conn(){
    }
    finally{
     $this->destroy_conn();
-    $stmnt->close(); 
     return $final_result;
      }
    }

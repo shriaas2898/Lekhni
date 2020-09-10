@@ -61,17 +61,19 @@ header("Location: logout.php");
           $dbo = new DBOperation();
           $email = $_POST["email"];
           $user_pass = $_POST['pass'];
-          $result = $dbo->execute_query("SELECT uid, pass FROM user WHERE email = ? LIMIT 1","s",$email);
+          $result = $dbo->execute_query("SELECT uid, rid, pass FROM user WHERE email = ? LIMIT 1","s",$email);
           if($result[0]==1)
           {$row = $result[1][0];
           $stored_pass =$row["pass"];
           $id = $row["uid"];
-        
+          $rid = $row["rid"];
           if (password_verify($user_pass,$stored_pass)){
 
-            $_SESSION["user_id"] = $id;
+            $_SESSION["user_id"] = (int)$id;
+            $_SESSION["role_id"] = (int)$rid;
             if(isset($_POST["remember"])){
             setcookie("uid",$id, time() + (86400 * 30));
+            setcookie("rid",$rid, time() + (86400 * 30));
             }
             echo "<script type='text/javascript'>alert('You have succsessfully logged-in!');
             window.location.href='index.php';

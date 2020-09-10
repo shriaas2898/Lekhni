@@ -1,6 +1,14 @@
 
 <?php
 session_start();
+// echo "Get:";
+// var_dump($_GET);
+// echo "Session:";
+// var_dump($_SESSION);
+// echo "Cookie:";
+// var_dump($_COOKIE);
+// echo "uid:";
+// var_dump($uid);
 if(isset($_COOKIE['uid'])) $_SESSION['user_id'] = $_COOKIE['uid'];
 require "database/db_operations.php";
 try{      
