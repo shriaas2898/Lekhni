@@ -1,12 +1,14 @@
 <?php
 session_start();
-if(isset($_COOKIE['uid'])) $_SESSION['user_id'] = $_COOKIE['uid'];
+
+// -1 dentoes anoynamus user
 if(!isset($_SESSION["user_id"])){
- header("Location: not_allowed.html");
+  $_SESSION['user_id'] = isset( $_COOKIE['uid'])? (int)$_COOKIE['uid']: -1;
+  $_SESSION['role_id'] = isset( $_COOKIE['rid'])? (int)$_COOKIE['rid']: -1;
 }
 require "database/db_operations.php";
 
-// Function to add new article
+// Function to add new article 
   function add_article($dbo){
     $title = $_POST["art_title"];
     $body = $_POST["art_body"];
@@ -66,7 +68,7 @@ try{
   if(isset($_GET["ida"])){
   $art_id = $_GET["ida"];
   
-  $result = $dbo->execute_query("SELECT title, body,name,uid FROM articles a,user u WHERE id = ? AND auth_id = uid LIMIT 1","i",$art_id);
+  $result = $dbo->execute_query("SELECT title, body,name,modified,uid FROM articles a,user u WHERE id = ? AND auth_id = uid LIMIT 1","i",$art_id);
   if($result){
       $row = $result[1][0];
       $title = $row['title'];
@@ -76,11 +78,12 @@ try{
       $uid = $row["uid"];
       //Changing the heading of page
       $heading = "Editing: $title";
-
-    if($_SESSION["user_id"] != $uid){
-    header("Location: not_allowed.html");
-    die();
+    // Logged in user should either be admin or owner of the profile to edit it
+    if(($_SESSION["user_id"]==-1)||( $_SESSION["role_id"]!=0 && $_SESSION["user_id"]!=$uid )){
+      header("Location: not_allowed.html");
+      die();
     }
+    
   }
 }
 

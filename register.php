@@ -2,10 +2,11 @@
 session_start();
 if(isset($_COOKIE['uid'])) $_SESSION['user_id'] = $_COOKIE['uid'];
 require "database/db_operations.php";
-// If user is already loggedin
-if(isset($_SESSION["user_id"])){
-header("Location: logout.php");
-}
+// If user is not anonymous
+if($_SESSION["user_id"] != -1){
+  header("Location: logout.php");
+  
+  }
 ?>
 <!DOCTYPE html>
 <html>

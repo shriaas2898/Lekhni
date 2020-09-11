@@ -16,25 +16,21 @@ require "database/db_operations.php";
 
 try{
   //Create Database Object
-  $dbo = new DBOperation();
-  $uid = $_SESSION["user_id"];  
-  $result = $dbo->execute_query("SELECT email, name FROM user WHERE uid = ? LIMIT 1","i",$uid);
+  $dbo = new DBOperation(); 
+  $result = $dbo->execute_query("SELECT email, name, rid FROM user  WHERE uid = ? LIMIT 1","i",$uid);
   if($result){
       $row = $result[1][0];
       $email = $row['email'];
       $name = $row['name'];
+      $role = $row['rid'];
       
-      //Changing the heading of page
+      //Changing the name of author
       $heading = "Editing $name's Profile";
 
-    if($_SESSION["user_id"] != $uid){
-    header("Location: not_allowed.html");
-    die();
-    }
+    
   }
+  ?>
 
-
- ?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -44,15 +40,31 @@ try{
   </head>
   <body>
 
-  <div class="header">
+    <!-- Header -->
+    <div class="header">
       <a href="index.php" class="logo"> <img src="files/logo.png" alt="Lekhni" height="150"> </a>
       <div class="header-right">
-          <a  href="index.php">Home</a>
-          <a  href="edit_article.php">Add Article</a>
-            <a  class='active' href='author.php/idu="$_SESSION["user_id"]."'>My Profile</a>
-            <a href='logout.php'>Sign Out</a>
-      </div>
- </div>
+        <a href="index.php">Home</a>
+        <?php
+          if($_SESSION["user_id"] == -1){
+            echo '<a  href="register.php">Sign Up</a>';
+            echo '<a href="login.php">Sign In</a>';
+          }
+          else{
+            ?>
+          <div class="dropdown">
+             <a  class='active dropbtn' href='edit_author.php?idu=<?php echo $_SESSION["user_id"];?>'>My Profile</a>
+             <div class="dropdown-content">  
+                <a  href="edit_article.php">Add Article</a>
+                <a href='author.php?idu=<?php echo $_SESSION["user_id"];?>'>My Articles</a>
+                <a href='logout.php'>Sign Out</a>
+              </div>    
+          </div> 
+           <?php
+            }
+         ?>
+       </div>
+   </div>
 
     <h1><?php echo  $heading; ?></h1>
     <form action="edit_author.php" method="post" style="border:1px solid #ccc; margin:10px 100px 10px 100px;">
@@ -68,7 +80,26 @@ try{
 
     <label for="pass"><b>New Password</b></label>
     <input type="password" placeholder="Enter new Password" name="pass" >
-
+    
+    <?php
+      // To change role:
+      if($_SESSION['role_id']==0){
+        $result = $dbo->execute_query("SELECT rid, rname from roles");
+        $roles = array_slice( $result[1],1); // The first record contains role for anonyamous user.
+    }    
+    ?>
+    <label for="role"><b>Edit Role</b></label>
+    <select name="role">
+      <?php
+        foreach( $roles as $row ){
+          echo '<option value="'.$row['rid'].'" ';
+          if($role == $row['rid']){
+            echo "selected ";
+          }
+          echo ">".$row['rname']." </option>";
+        } 
+      ?>
+    </select>
     <div class="clearfix">
       <a href="index.php"><button type="button" class="cancelbtn">Cancel</button></a>
       <button type="submit" class="signupbtn" name="submit">Save</button>
@@ -93,14 +124,15 @@ var_dump($_POST);
     $name = $_POST["name"];
     $email = $_POST["email"];
     $id = (int) $uid;//ToDo change to get query
+    $rid = (int)$_POST['role'];
     print((bool)$_POST['pass']);
     if($_POST['pass']){
       
       $pass = $_POST['pass'];
-      $result = $dbo->execute_update("UPDATE user SET email = ? , name = ?, pass = ?  WHERE uid = ?","sssi", $email,$name,$pass,$id);  
+      $result = $dbo->execute_update("UPDATE user SET email = ? , name = ?, rid = ?, pass = ?  WHERE uid = ?","sssii", $email,$name,$pass,$rid,$id);  
     }
     else{
-    $result = $dbo->execute_update("UPDATE user SET email = ? , name = ?  WHERE uid = ?","ssi", $email,$name,$id);
+    $result = $dbo->execute_update("UPDATE user SET email = ? , name = ?, rid = ?  WHERE uid = ?","ssii", $email,$name,$rid,$id);
     }
     var_dump($result);  
     if($result){

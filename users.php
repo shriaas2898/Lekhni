@@ -23,11 +23,9 @@ try{
       //Create Database Object
       $dbo = new DBOperation();
       $auth_id = $_SESSION["user_id"];
-      $result = $dbo->execute_query("SELECT name FROM user WHERE uid = ?","i",$auth_id);
-      $name = $result[1][0]["name"];
-      $result = $dbo->execute_query("SELECT title, modified,body,name,id FROM articles a,user u WHERE auth_id = uid AND uid = ? ORDER BY modified DESC","i",$auth_id);
+      $result = $dbo->execute_query("SELECT uid, name, email, count(*) as 'num_articles' FROM user u, articles a WHERE a.auth_id=u.uid GROUP BY a.auth_id");
       if($result[0]==-1){
-        echo "<script type='text/javascript'>alert('We are not able to complete your registration, please try again later.');</script>";
+        echo "<script type='text/javascript'>alert('We are not able to complete your request, please try again later.');</script>";
       }
       if ($result[0]==1){
         $rows = $result[1];
@@ -41,11 +39,18 @@ try{
     <title>User Profile</title>
   </head>
   <body>
-
+    <!-- Header -->
     <div class="header">
       <a href="index.php" class="logo"> <img src="files/logo.png" alt="Lekhni" height="150"> </a>
       <div class="header-right">
-          <a  href="index.php">Home</a>
+        <a  href="index.php">Home</a>
+        <?php
+          if($_SESSION["user_id"] != -1){
+            echo "<a  href='author.php?idu=".$_SESSION["user_id"]."'>My Articles</a>";
+            echo "<a href='logout.php'>Sign Out</a>";
+          }
+          else{
+            ?>
           <div class="dropdown">
              <a  class='active dropbtn' href='edit_author.php/."'>My Profile</a>
              <div class="dropdown-content">  
@@ -53,26 +58,30 @@ try{
                 <a href='author.php/idu=".$_SESSION["user_id"]."'>My Articles</a>
                 <a href='logout.php'>Sign Out</a>
               </div>    
-          </div>
-      </div>
-    </div>
+          </div> 
+           <?php
+            }
+         ?>
+       </div>
+     </div> 
 
-
-    <h1 class="heading"><u> <?php echo "$name"; ?> </u></h1>
+    <h1 class="heading"><u> Authors </u></h1>
     <div class="container">
       <?php 
       if(isset($rows)){
       foreach($rows as $row) {
-        $id = $row["id"];
+        $id = $row["uid"];
         ?>
       <div class="article_block">
-        <h2><?php echo "<a href='view_article.php?ida=$id'>".$row['title']."</a>";  ?></h2>
-        <?php echo "Written By:".$row['name']." On: ".$row['modified'].""; ?>
-        <p> <?php echo htmlentities(substr($row['body'],0,250))."...<a href='view_article.php?ida=$id'>(Read More)</a>";}
-        
-         ?> </p>
+        <h4><?php echo "<a href='author.php?idu=$id'>".$row['name']."</a>";  ?></h4>
+        <?php echo "Contact:".$row['email']."  Articles Published:".$row['num_articles']; 
+        ?>
+      </div>
+
+      
         <hr>
 <?php
+      }//End of foreach
 }// End of if
    else{
     ?>
