@@ -106,6 +106,31 @@ try{
 
       </div>
     </div>
+    <!-- Header -->
+    <div class="header">
+      <a href="index.php" class="logo"> <img src="files/logo.png" alt="Lekhni" height="150"> </a>
+      <div class="header-right">
+        <a href="index.php">Home</a>
+        <?php
+          if($_SESSION["user_id"] == -1){
+            echo '<a  href="register.php">Sign Up</a>';
+            echo '<a href="login.php">Sign In</a>';
+          }
+          else{
+            ?>
+          <div class="dropdown">
+             <a  class='active dropbtn' href='edit_author.php?idu=<?php echo $_SESSION["user_id"];?>'>My Profile</a>
+             <div class="dropdown-content">  
+                <a  href="edit_article.php">Add Article</a>
+                <a href='author.php?idu=<?php echo $_SESSION["user_id"];?>'>My Articles</a>
+                <a href='logout.php'>Sign Out</a>
+              </div>    
+          </div> 
+           <?php
+            }
+         ?>
+       </div>
+   </div>
 
 
   <form action="edit_article.php" id="edit_article_form" method="post" style="border:1px solid #ccc; margin:10px 100px 10px 100px;">

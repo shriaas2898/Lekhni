@@ -44,7 +44,7 @@ try{
     <div class="header">
       <a href="index.php" class="logo"> <img src="files/logo.png" alt="Lekhni" height="150"> </a>
       <div class="header-right">
-        <a href="index.php">Home</a>
+        <a  href="index.php">Home</a>
         <?php
           if($_SESSION["user_id"] == -1){
             echo '<a  href="register.php">Sign Up</a>';
@@ -66,7 +66,7 @@ try{
        </div>
    </div>
 
-    <h1><?php echo  $heading; ?></h1>
+   <h1><?php echo  $heading; ?></h1>
     <form action="edit_author.php" method="post" style="border:1px solid #ccc; margin:10px 100px 10px 100px;">
   <div class="container">
     <p>You can edit your information here.</p>

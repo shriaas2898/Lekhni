@@ -35,26 +35,33 @@ try{
     <title> <?php echo "$title"; ?> </title>
   </head>
   <body>
+    <!-- Header -->
     <div class="header">
       <a href="index.php" class="logo"> <img src="files/logo.png" alt="Lekhni" height="150"> </a>
       <div class="header-right">
         <a class="active" href="index.php">Home</a>
         <?php
-          if(isset($_SESSION["user_id"])){
-            echo "<a  href='user.php/id'>My Profile</a>";
-            echo "<a href='logout.php'>Sign Out</a>";
-            if($_SESSION["user_id"] == $uid){
-              echo "<a  href='edit_article.php?ida=$art_id'>Edit Article</a>";
-            }
-          }
-          else{
+          if($_SESSION["user_id"] == -1){
             echo '<a  href="register.php">Sign Up</a>';
             echo '<a href="login.php">Sign In</a>';
           }
+          else{
+            ?>
+          <div class="dropdown">
+             <a  class='dropbtn' href='edit_author.php?idu=<?php echo $_SESSION["user_id"];?>'>My Profile</a>
+             <div class="dropdown-content">  
+                <a  href="edit_article.php">Add Article</a>
+                <a href='author.php?idu=<?php echo $_SESSION["user_id"];?>'>My Articles</a>
+                <a href='logout.php'>Sign Out</a>
+              </div>    
+          </div> 
+           <?php
+            }
          ?>
+       </div>
+   </div>
 
-      </div>
-    </div>
+
     <div class="article_block">
 
        <?php
@@ -62,7 +69,7 @@ try{
         echo "<span>Last Modified: $time</span>";
         ?>
         <p class="art_body"> <?php echo "$body"; ?> </p>
-        <span ><?php echo "Written By: $author"; ?></span>
+        <span ><?php echo "Written By : <a href='author.php?idu=$uid'>$author</a>"; ?></span>
     </div>
 <!--Footer-->
 <footer >

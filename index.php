@@ -9,7 +9,7 @@ require "database/db_operations.php";
 try{      
       //Create Database Object
       $dbo = new DBOperation();
-      $result = $dbo->execute_query("SELECT title, modified,body,name,id FROM articles a,user u WHERE auth_id = uid ORDER BY modified DESC");
+      $result = $dbo->execute_query("SELECT title, modified,body,name,id,uid FROM articles a,user u WHERE auth_id = uid ORDER BY modified DESC");
       if($result[0]==-1){
         echo "<script type='text/javascript'>alert('We are not able to complete your registration, please try again later.');</script>";
       } 
@@ -63,7 +63,7 @@ try{
         ?>
       <div class="article_block">
         <h2><?php echo "<a href='view_article.php?ida=$id'>".htmlentities($row['title'])."</a>";  ?></h2>
-        <?php echo "Written By:".$row['name']." On: ".$row['modified'].""; ?>
+        <?php echo "Written By: <a href='author.php?idu=".$row['uid']."'>".$row['name'] ."</a> On: ".$row['modified'].""; ?>
         <p> <?php echo htmlentities(substr($row['body'],0,250))."...<a href='view_article.php?ida=$id'>(Read More)</a>"; ?> </p>
         <hr>
       </div>

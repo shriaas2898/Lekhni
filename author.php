@@ -7,10 +7,7 @@ if(!isset($_SESSION["user_id"])){
   $_SESSION['user_id'] = isset( $_COOKIE['uid'])? (int)$_COOKIE['uid']: -1;
   $_SESSION['role_id'] = isset( $_COOKIE['rid'])? (int)$_COOKIE['rid']: -1;
 }
-if($_SESSION['role_id'] == -1){
-  header("Location: not_allowed.html");
-  die();
-}
+
 $auth_id = isset($_GET["idu"])? (int)$_GET["idu"]: (int)$_SESSION['user_id'];
 
 // echo "Get:";
@@ -20,7 +17,6 @@ $auth_id = isset($_GET["idu"])? (int)$_GET["idu"]: (int)$_SESSION['user_id'];
 // echo "Cookie:";
 // var_dump($_COOKIE);
 // echo "uid:";
-var_dump($uid);
   require "database/db_operations.php";
 
 try{  
@@ -51,7 +47,7 @@ try{
       <div class="header-right">
         <a  href="index.php">Home</a>
         <?php
-          if($_SESSION["user_id"] != -1){
+          if($_SESSION["user_id"] == -1){
             echo "<a  href='author.php?idu=".$_SESSION["user_id"]."'>My Articles</a>";
             echo "<a href='logout.php'>Sign Out</a>";
           }
