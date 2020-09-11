@@ -30,6 +30,7 @@ try{
       <a href="index.php" class="logo"> <img src="files/logo.png" alt="Lekhni" height="150"> </a>
       <div class="header-right">
         <a class="active" href="index.php">Home</a>
+        <a href="users.php">Authors</a>
         <?php
           if($_SESSION["user_id"] == -1){
             echo '<a  href="register.php">Sign Up</a>';
